@@ -1,0 +1,10 @@
+CREATE FUNCTION sendmail() RETURNS trigger AS $$
+DECLARE
+	BEGIN
+        PERFORM pg_notify(CAST('sendmail' AS text), '{"user_id": 123,"template":"myTemplate","email": {"subject":"123","data":{}}}');
+        RETURN new;
+	END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER sendmail AFTER UPDATE ON test
+FOR EACH ROW EXECUTE PROCEDURE sendmail();
